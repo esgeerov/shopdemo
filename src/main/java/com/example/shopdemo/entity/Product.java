@@ -27,10 +27,12 @@ public class Product {
     @Column
      Long id;
     @ManyToOne
+    @JoinColumn(name = "category_id")
     Category category;
     @Column
      String name;
      Double price;
+     String currency;
    @CreationTimestamp
      Date createdAt;
     @ColumnDefault(value = "1")

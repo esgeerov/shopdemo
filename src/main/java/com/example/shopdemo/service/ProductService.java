@@ -7,7 +7,15 @@ import com.example.shopdemo.dto.response.Response;
 import java.util.List;
 
 public interface ProductService {
-    Response getProductList();
+    Response<List<RespProduct>> getProductList();
 
     Response addProduct(ReqProduct reqProduct);
+
+    Response<RespProduct> getProductListById(Long productId);
+
+    Response updateProduct(ReqProduct reqProduct);
+
+    Response deleteProduct(Long productId);
+
+    Response<List<RespProduct>> getProductListByCategoryId(Long categoryId);
 }

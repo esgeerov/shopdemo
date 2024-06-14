@@ -1,6 +1,7 @@
 package com.example.shopdemo.controller;
 
 import com.example.shopdemo.dto.request.ReqCategory;
+import com.example.shopdemo.dto.response.RespCategory;
 import com.example.shopdemo.dto.response.Response;
 import com.example.shopdemo.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,20 @@ public class CategoryController {
     }
 
     @GetMapping("/getCategoryList")
-    public Response getCategoryList(){
+    public Response<List<RespCategory>> getCategoryList(){
         return categoryService.getCategoryList();
     }
+    @GetMapping("/getCategoryListById")
+    public Response<RespCategory> getCategoryListById(@RequestParam(value = "id") Long categoryId){
+        return categoryService.getCategoryListByid(categoryId);
+    }
+    @PostMapping("/updateCategory")
+    public Response updateCategory(@RequestBody ReqCategory reqCategory){
+        return categoryService.updateCategory(reqCategory);
+    }
+    @PostMapping("/deleteCategory/{categoryId}")
+    public Response deleteCategory(@PathVariable Long categoryId ){
+        return categoryService.deleteCategory(categoryId);
+    }
+
 }

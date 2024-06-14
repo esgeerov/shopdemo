@@ -9,4 +9,6 @@ public class ReqProduct {
 
      String name;
      Double price;
+     String currency;
+     Long categoryId;
 }

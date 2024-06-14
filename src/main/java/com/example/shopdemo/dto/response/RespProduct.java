@@ -1,16 +1,21 @@
 package com.example.shopdemo.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.shopdemo.entity.Category;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 
 public class RespProduct {
-    private Long id;
-    private String name;
-    private Double price;
+    Long productId;
+    String name;
+    Double price;
+    String currency;
+    RespCategory respCategory;
+
 
 }

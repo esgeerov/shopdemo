@@ -12,14 +12,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(name ="/product")
+@RequestMapping("/product")
 
 
 public class ProductController {
     private final ProductService productService;
     @GetMapping("/GetProductList")
 
-    public Response getProductList(){
+    public Response<List<RespProduct>> getProductList(){
         return productService.getProductList();
 
     }
@@ -27,6 +27,25 @@ public class ProductController {
     public Response addProduct(@RequestBody ReqProduct reqProduct){
         return productService.addProduct(reqProduct);
     }
+
+    @GetMapping("/getProductListById")
+    public Response<RespProduct> getProductListById(@RequestParam(value = "id") Long productId){
+        return productService.getProductListById(productId);
+    }
+    @PostMapping("/updateProduct")
+    public Response updateProduct(@RequestBody ReqProduct reqProduct){
+        return productService.updateProduct(reqProduct);
+    }
+    @PostMapping("/deleteProduct/{productId}")
+    public Response deleteProduct(@PathVariable Long productId){
+        return productService.deleteProduct(productId);
+    }
+    @GetMapping("/getProductListByCategoryId/{categoryId}")
+    public Response<List<RespProduct>> getProductListByCategoryId(@PathVariable Long categoryId){
+        return productService.getProductListByCategoryId(categoryId);
+    }
+
+
 
 
 }
