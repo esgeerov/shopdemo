@@ -5,10 +5,12 @@ import com.example.shopdemo.dto.response.RespCategory;
 import com.example.shopdemo.dto.response.RespStatus;
 import com.example.shopdemo.dto.response.Response;
 import com.example.shopdemo.entity.Category;
+import com.example.shopdemo.entity.Product;
 import com.example.shopdemo.enums.EnumAviableStatus;
 import com.example.shopdemo.exception.ExceptionConstants;
 import com.example.shopdemo.exception.ShopException;
 import com.example.shopdemo.repository.CategoryRepository;
+import com.example.shopdemo.repository.ProductRepository;
 import com.example.shopdemo.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
 
     @Override
 
@@ -133,6 +136,36 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (Exception exception) {
             response.setRespStatus(new RespStatus(ExceptionConstants.INTERNAL_EXCEPTION, "Internal exception"));
         }
+        return response;
+    }
+
+    @Override
+    public Response<RespCategory> getCategoryByProductId(Long productId) {
+        Response<RespCategory> response = new Response<>();
+        try {
+            if (productId == null) {
+                throw new ShopException(ExceptionConstants.PRODUCTID_NOT_FOUND, "please enter product id");
+            }
+            Product product = productRepository.findAllByActiveAndId(EnumAviableStatus.ACTIVE.value, productId);
+            if (product == null) {
+                throw new ShopException(ExceptionConstants.PRODUCT_NOT_FOUND, "Product not found");
+            }
+            Category category = categoryRepository.findCategoryByActiveAndProduct(EnumAviableStatus.ACTIVE.value, product);
+            if (category == null) {
+                throw new ShopException(ExceptionConstants.CATEGORY_NOT_FOUND, "Category not found");
+            }
+
+            RespCategory respCategory=new RespCategory();
+            respCategory.setName(product.getName());
+            response.setT(respCategory);
+            response.setRespStatus(RespStatus.getSuccesMessage());
+
+        } catch (ShopException shopException) {
+            response.setRespStatus(new RespStatus(shopException.getCode(), shopException.getMessage()));
+        } catch (Exception exception) {
+            response.setRespStatus(new RespStatus(ExceptionConstants.INTERNAL_EXCEPTION, "Internal exception"));
+        }
+
         return response;
     }
 

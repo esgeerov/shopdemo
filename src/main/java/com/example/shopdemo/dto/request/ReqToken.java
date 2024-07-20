@@ -1,16 +1,17 @@
 package com.example.shopdemo.dto.request;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ReqProduct {
-    Long productId;
-    String name;
-    Double price;
-    String currency;
-    Long categoryId;
-    ReqToken reqToken;
+
+public class ReqToken {
+    Long userId;
+    String token;
 }

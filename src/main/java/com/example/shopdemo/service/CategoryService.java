@@ -15,4 +15,6 @@ public interface CategoryService {
     Response updateCategory(ReqCategory reqCategory);
 
     Response deleteCategory(Long categoryId);
+
+    Response<RespCategory> getCategoryByProductId(Long productId);
 }

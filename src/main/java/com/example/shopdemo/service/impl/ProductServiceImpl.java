@@ -1,19 +1,25 @@
 package com.example.shopdemo.service.impl;
 
 import com.example.shopdemo.dto.request.ReqProduct;
+import com.example.shopdemo.dto.request.ReqToken;
 import com.example.shopdemo.dto.response.RespCategory;
 import com.example.shopdemo.dto.response.RespProduct;
 import com.example.shopdemo.dto.response.RespStatus;
 import com.example.shopdemo.dto.response.Response;
 import com.example.shopdemo.entity.Category;
 import com.example.shopdemo.entity.Product;
+import com.example.shopdemo.entity.User;
+import com.example.shopdemo.entity.UserToken;
 import com.example.shopdemo.enums.EnumAviableStatus;
 import com.example.shopdemo.exception.ExceptionConstants;
 import com.example.shopdemo.exception.ShopException;
 import com.example.shopdemo.repository.CategoryRepository;
 import com.example.shopdemo.repository.ProductRepository;
+import com.example.shopdemo.repository.UserRepository;
+import com.example.shopdemo.repository.UserTokenRepository;
 import com.example.shopdemo.service.CategoryService;
 import com.example.shopdemo.service.ProductService;
+import com.example.shopdemo.util.Utility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,21 +34,22 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final UserTokenRepository userTokenRepository;
+    private final UserRepository userRepository;
+    private final Utility utility;
 
     @Override
-    public Response<List<RespProduct>> getProductList() {
+    public Response<List<RespProduct>> getProductList(ReqToken reqToken) {
         Response<List<RespProduct>> response = new Response<>();
-        List<RespProduct> respProductList = new ArrayList<>();
+        List<RespProduct> respProductList;
         try {
+            utility.checkToken(reqToken.getToken(), reqToken.getUserId());
             List<Product> productList = productRepository.findAllByActive(EnumAviableStatus.ACTIVE.value);
             if (productList.isEmpty()) {
                 throw new ShopException(ExceptionConstants.PRODUCT_NOT_FOUND, "Product not found");
             }
-            for (Product product : productList) {
-                RespProduct respProduct = mapping(product);
-                respProductList.add(respProduct);
-            }
-            productList.stream().map(product -> mapping(product)).collect(Collectors.toList());
+
+            respProductList = productList.stream().map(product -> mapping(product)).collect(Collectors.toList());
             response.setT(respProductList);
             response.setRespStatus(RespStatus.getSuccesMessage());
         } catch (ShopException shopException) {
@@ -59,11 +66,13 @@ public class ProductServiceImpl implements ProductService {
         Response<RespProduct> response = new Response();
         Product product = new Product();
         try {
+            ReqToken reqToken = reqProduct.getReqToken();
+            utility.checkToken(reqToken.getToken(), reqToken.getUserId());
             if (reqProduct == null) {
                 throw new ShopException(ExceptionConstants.INVALID_REQEUST_DATA, "Data not found");
             }
-            Long categoryId=reqProduct.getCategoryId();
-            Category category=categoryRepository.findAllByActiveAndId(EnumAviableStatus.ACTIVE.value,categoryId);
+            Long categoryId = reqProduct.getCategoryId();
+            Category category = categoryRepository.findAllByActiveAndId(EnumAviableStatus.ACTIVE.value, categoryId);
             product.setName(reqProduct.getName());
             product.setPrice(reqProduct.getPrice());
             product.setCurrency(reqProduct.getCurrency());
@@ -79,9 +88,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Response<RespProduct> getProductListById(Long productId) {
+    public Response<RespProduct> getProductListById(ReqProduct reqProduct) {
         Response<RespProduct> response = new Response<>();
         try {
+            String token = reqProduct.getReqToken().getToken();
+            Long userId = reqProduct.getReqToken().getUserId();
+            Long productId = reqProduct.getProductId();
+            utility.checkToken(token, userId);
             if (productId == null) {
                 throw new ShopException(ExceptionConstants.PRODUCTID_NOT_FOUND, "Product id not found ");
             }
@@ -108,6 +121,8 @@ public class ProductServiceImpl implements ProductService {
             if (reqProduct == null) {
                 throw new ShopException(ExceptionConstants.PRODUCT_NOT_FOUND, "Product not found");
             }
+            ReqToken reqToken = reqProduct.getReqToken();
+            utility.checkToken(reqToken.getToken(), reqToken.getUserId());
             Product product = new Product();
             product.setName(reqProduct.getName());
             product.setPrice(reqProduct.getPrice());
@@ -122,9 +137,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Response deleteProduct(Long productId) {
+    public Response deleteProduct(ReqProduct reqProduct) {
         Response response = new Response();
         try {
+            Long productId = reqProduct.getProductId();
+            ReqToken reqToken = reqProduct.getReqToken();
+            utility.checkToken(reqToken.getToken(), reqToken.getUserId());
             if (productId == null) {
                 throw new ShopException(ExceptionConstants.PRODUCTID_NOT_FOUND, "Product id not found");
             }
@@ -156,9 +174,9 @@ public class ProductServiceImpl implements ProductService {
             if (productList.isEmpty()) {
                 throw new ShopException(ExceptionConstants.PRODUCT_NOT_FOUND, "Product not found");
             }
-           List<RespProduct> respProductList=productList.stream().map(this::mapping).collect(Collectors.toList());
-                response.setT(respProductList);
-                response.setRespStatus(RespStatus.getSuccesMessage());
+            List<RespProduct> respProductList = productList.stream().map(this::mapping).collect(Collectors.toList());
+            response.setT(respProductList);
+            response.setRespStatus(RespStatus.getSuccesMessage());
         } catch (ShopException shopException) {
             response.setRespStatus(new RespStatus(shopException.getCode(), shopException.getMessage()));
         } catch (Exception exception) {
@@ -168,7 +186,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private RespProduct mapping(Product product) {
-        RespCategory respCategory=RespCategory.builder()
+        RespCategory respCategory = RespCategory.builder()
                 .id(product.getCategory().getId())
                 .name(product.getCategory().getName())
                 .build();

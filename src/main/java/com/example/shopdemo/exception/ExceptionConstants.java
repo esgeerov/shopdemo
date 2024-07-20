@@ -7,4 +7,7 @@ public final class ExceptionConstants {
     public static final Integer CATEGORY_NOT_FOUND=103;
     public static final Integer CATEGORYID_NOT_FOUND = 104;
     public static final Integer PRODUCTID_NOT_FOUND =105 ;
+    public static final Integer INVALID_USER = 106;
+    public static final Integer INVALID_TOKEN =107 ;
+    public static final Integer TOKEN_EXPIRED = 108;
 }

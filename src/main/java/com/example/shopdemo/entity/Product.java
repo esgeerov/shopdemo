@@ -25,16 +25,18 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-     Long id;
+    Long id;
     @ManyToOne
     @JoinColumn(name = "category_id")
     Category category;
-    @Column
-     String name;
-     Double price;
-     String currency;
-   @CreationTimestamp
-     Date createdAt;
+    @Column(name = "name")
+    String name;
+    @Column(name = "price")
+    Double price;
+    @Column(name = "currency")
+    String currency;
+    @CreationTimestamp
+    Date createdAt;
     @ColumnDefault(value = "1")
-     Integer active;
+    Integer active;
 }

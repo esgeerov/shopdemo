@@ -1,8 +1,10 @@
 package com.example.shopdemo.dto.response;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @NoArgsConstructor
@@ -10,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class RespStatus {
     private Integer code;
     private String message;
-    private static final Integer SUCCESS_CODE=1;
-    private static final String SUCCESS_MESSAGE="success";
+    private static final Integer SUCCESS_CODE = 1;
+    private static final String SUCCESS_MESSAGE = "success";
 
-    public static RespStatus getSuccesMessage(){
-        return new RespStatus(SUCCESS_CODE,SUCCESS_MESSAGE);
+    public static RespStatus getSuccesMessage() {
+        return new RespStatus(SUCCESS_CODE, SUCCESS_MESSAGE);
     }
 }

@@ -37,5 +37,9 @@ public class CategoryController {
     public Response deleteCategory(@PathVariable Long categoryId ){
         return categoryService.deleteCategory(categoryId);
     }
+    @GetMapping("/getCategoryByProductId/{productId}")
+    public Response<RespCategory> getCategoryByProductId(@PathVariable Long productId){
+        return categoryService.getCategoryByProductId(productId);
+    }
 
 }
