@@ -2,6 +2,7 @@ package com.example.shopdemo.controller;
 
 import com.example.shopdemo.dto.request.ReqLogin;
 import com.example.shopdemo.dto.request.ReqToken;
+import com.example.shopdemo.dto.request.ReqUser;
 import com.example.shopdemo.dto.response.RespUser;
 import com.example.shopdemo.dto.response.Response;
 import com.example.shopdemo.service.UserService;
@@ -20,6 +21,10 @@ public class UserController {
     @PostMapping("/logout")
     public Response logout(@RequestBody ReqToken reqToken){
         return userService.logout(reqToken);
+    }
+    @PostMapping("/createUser")
+    public Response createUser(@RequestBody ReqUser reqUser){
+       return userService.createUser(reqUser);
     }
 
 }

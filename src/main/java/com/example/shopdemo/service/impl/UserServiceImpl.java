@@ -2,6 +2,7 @@ package com.example.shopdemo.service.impl;
 
 import com.example.shopdemo.dto.request.ReqLogin;
 import com.example.shopdemo.dto.request.ReqToken;
+import com.example.shopdemo.dto.request.ReqUser;
 import com.example.shopdemo.dto.response.RespStatus;
 import com.example.shopdemo.dto.response.RespToken;
 import com.example.shopdemo.dto.response.RespUser;
@@ -65,16 +66,42 @@ public class UserServiceImpl implements UserService {
     public Response logout(ReqToken reqToken) {
         Response response = new Response();
         try {
-           UserToken userToken= utility.checkToken(reqToken.getToken(),reqToken.getUserId());
-           userToken.setActive(EnumAviableStatus.DEACTIVE.value);
-           userTokenRepository.save(userToken);
-           response.setRespStatus(RespStatus.getSuccesMessage());
+            UserToken userToken = utility.checkToken(reqToken.getToken(), reqToken.getUserId());
+            userToken.setActive(EnumAviableStatus.DEACTIVE.value);
+            userTokenRepository.save(userToken);
+            response.setRespStatus(RespStatus.getSuccesMessage());
 
         } catch (ShopException shopException) {
             response.setRespStatus(new RespStatus(shopException.getCode(), shopException.getMessage()));
         } catch (Exception exception) {
             response.setRespStatus(new RespStatus(ExceptionConstants.INTERNAL_EXCEPTION, "Internal exception"));
         }
+        return response;
+    }
+
+    @Override
+    public Response createUser(ReqUser reqUser) {
+        Response response = new Response();
+        User user=new User();
+        try {
+            String username = reqUser.getUsername();
+            String password = reqUser.getPassword();
+            String fullName = reqUser.getFullName();
+            if (reqUser==null) {
+                throw new ShopException(ExceptionConstants.INVALID_REQEUST_DATA, "Please correct enter the field");
+            }
+            user.setFullname(fullName);
+            user.setUsername(username);
+            user.setPassword(password);
+            userRepository.save(user);
+            response.setRespStatus(RespStatus.getSuccesMessage());
+
+        } catch (ShopException shopException) {
+            response.setRespStatus(new RespStatus(shopException.getCode(), shopException.getMessage()));
+        } catch (Exception exception) {
+            response.setRespStatus(new RespStatus(ExceptionConstants.INTERNAL_EXCEPTION, "Internal exception"));
+        }
+
         return response;
     }
 }

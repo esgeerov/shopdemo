@@ -1,6 +1,7 @@
-package az.orient.bank.security;
+package com.example.shopdemo.security;
 
-import az.orient.bank.entity.Users;
+
+import com.example.shopdemo.entity.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,11 +18,11 @@ public class MyUserDetails  implements UserDetails {
     private List<GrantedAuthority> authorities;
 
 
-    public MyUserDetails(Users user){
-        this.email=user.getEmail();
-        this.password=user.getPassword();
-        this.active= user.getActive();
-        this.authorities= Arrays.stream(user.getRole().split(","))
+    public MyUserDetails(Users users){
+        this.email=users.getEmail();
+        this.password=users.getPassword();
+        this.active= users.getActive();
+        this.authorities= Arrays.stream(users.getRole().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }

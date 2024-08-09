@@ -1,8 +1,9 @@
-package az.orient.bank.security;
+package com.example.shopdemo.security;
 
-import az.orient.bank.entity.Users;
-import az.orient.bank.enums.EnumAviableStatus;
-import az.orient.bank.repository.UsersReposirtory;
+
+import com.example.shopdemo.entity.Users;
+import com.example.shopdemo.enums.EnumAviableStatus;
+import com.example.shopdemo.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
-    private final UsersReposirtory usersReposirtory;
+    private final UsersRepository usersReposirtory;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -1,6 +1,5 @@
 package com.example.shopdemo.entity;
 
-import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.sql.Date;
+import javax.persistence.*;
+
 
 @Data
 @Entity
@@ -24,7 +25,7 @@ public class UserToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     User user;
     String token;
     @CreationTimestamp

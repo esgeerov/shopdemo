@@ -1,6 +1,6 @@
 package com.example.shopdemo.entity;
 
-import jakarta.persistence.*;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.sql.Date;
-
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -27,7 +27,7 @@ public class Product {
     @Column
     Long id;
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id",referencedColumnName = "id")
     Category category;
     @Column(name = "name")
     String name;

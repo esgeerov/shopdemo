@@ -1,6 +1,6 @@
 package com.example.shopdemo.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -23,7 +23,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
      Long id;
     @OneToMany
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id",referencedColumnName ="id")
     List <Product> product;
     @Column
      String name;
