@@ -20,6 +20,8 @@ import com.example.shopdemo.repository.UserTokenRepository;
 import com.example.shopdemo.service.CategoryService;
 import com.example.shopdemo.service.ProductService;
 import com.example.shopdemo.util.Utility;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
 
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
